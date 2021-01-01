@@ -1,5 +1,4 @@
-name: ci
-
+name: docker build and deploy
 on:
   push:
     branches: master
