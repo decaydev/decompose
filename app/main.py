@@ -131,7 +131,7 @@ class TileKits(object):
                     "-background",
                     "None",
                     "-font",
-                    "Permanent-Marker",
+                    "PermanentMarker.ttf",
                     "-pointsize",
                     "90",
                     "-fill",
