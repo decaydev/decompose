@@ -2,7 +2,7 @@ name: docker build and deploy
 
 on:
   workflow_run:
-    workflows: ["python-app"]
+    workflows: ["python install and lint"]
     branches: [main]
     types: 
       - completed
