@@ -14,7 +14,7 @@ items = blob.json()
 def search_item(shortname):
     return next((item for item in items["items"] if item["shortname"] == shortname), False)
 
-@app.route("/kit", methods=["POST"])
+@app.route("/kit", methods=["PUT"])
 def kit():
     data = request.json
     tile = TileKits(data)
