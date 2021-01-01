@@ -1,6 +1,6 @@
 # decaydev-flask-kits
 
-![Python application](https://github.com/decaydev/flask-kits/workflows/Python%20application/badge.svg)
+![python install and lint](https://github.com/decaydev/flask-kits/workflows/python%20install%20and%20lint/badge.svg)
 
 ## Flask server that returns kit tiles (using imagemagick and pngquant) 
 
