@@ -34,7 +34,6 @@ class TileKits(object):
         self.items = items["items"]
         self.item_count = len(self.data["items"])
 
-
     def request_assets(self):
         os.mkdir(self.id)
         for asset in self.data["imgs"]:
@@ -91,7 +90,7 @@ class TileKits(object):
                 num = index
 
             if stack <= 1:
-                annotate = 400
+                annotate = 390
             elif stack >= 2 and stack <= 9:
                 annotate = 370
             elif stack >= 10 and stack <= 99:
@@ -103,7 +102,7 @@ class TileKits(object):
             elif stack >= 10000 and stack <= 99999:
                 annotate = 170
             elif stack >= 100000 and stack <= 999999:
-                annotate = 140
+                annotate = 110
             elif stack >= 1000000 and stack <= 9999999:
                 annotate = 40
             subprocess.run(
@@ -207,7 +206,7 @@ class TileKits(object):
         )
 
     def create_kit(self):
-        if self.item_count <= 1 and self.item_count <= 2:
+        if self.item_count <= 1 or self.item_count <= 2:
             geometry = "+142+556"
         elif self.item_count >= 3 and self.item_count <= 24:
             geometry = "+12+556"
@@ -241,3 +240,8 @@ class TileKits(object):
                 f"{self.id}/kit.png",
             ]
         )
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", debug=false, port=80)
+
