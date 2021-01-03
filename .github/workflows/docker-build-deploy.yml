@@ -26,7 +26,7 @@ jobs:
         with:
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}:
+          body: ${{ steps.tag_version.outputs.changelog }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@master
