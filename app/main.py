@@ -79,7 +79,7 @@ class TileBanner(object):
                 "-strokewidth",
                 "1",
                 "-annotate",
-                f"{self.data["annotate"]}",
+                f"{self.data['annotate']}",
                 f"{self.data['steam_displayname']}",
                 f"{self.id}/output.png",
             ]
