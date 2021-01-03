@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - 'v*'
-    types: 
-      - completed
 
 jobs:
   docker-build-deploy:
