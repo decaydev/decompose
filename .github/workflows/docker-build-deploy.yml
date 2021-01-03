@@ -43,7 +43,7 @@ jobs:
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
         with:
-          #images: docker.pkg.github.com/${{ github.repository_owner }}/decompose/decaydev-decompose
+          images: docker.pkg.github.com/decaydev/decompose/decaydev-decompose
           tag-semver: |
             {{version}}
             {{major}}.{{minor}}
