@@ -96,13 +96,13 @@ class TileKits(object):
             elif stack >= 10 and stack <= 99:
                 annotate = 320
             elif stack >= 100 and stack <= 999:
-                annotate = 290
+                annotate = 250
             elif stack >= 1000 and stack <= 9999:
-                annotate = 230
+                annotate = 200
             elif stack >= 10000 and stack <= 99999:
-                annotate = 170
+                annotate = 130
             elif stack >= 100000 and stack <= 999999:
-                annotate = 110
+                annotate = 70
             elif stack >= 1000000 and stack <= 9999999:
                 annotate = 40
             subprocess.run(
