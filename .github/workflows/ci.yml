@@ -5,9 +5,9 @@ name: python install and lint
 
 on:
   push:
-    branches: [ master ]
+    branches: '*'
   pull_request:
-    branches: [ master ]
+    branches: '*'
 
 jobs:
   python-install-lint:
