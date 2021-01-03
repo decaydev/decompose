@@ -1,9 +1,9 @@
 name: docker build and deploy
 
 on:
-  workflow_run:
-    workflows: ["python install and lint"]
-    branches: [master]
+  push:
+    tags:
+      - 'v*'
     types: 
       - completed
 
@@ -14,6 +14,15 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
+      -
+        name: Docker meta
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: name/app
+          tag-semver: |
+            {{version}}
+            {{major}}.{{minor}}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -34,9 +43,8 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64
-          push: false
-          tags: |
-            user/app:latest
-            user/app:1.0.0
-            ghcr.io/user/app:latest
-            ghcr.io/user/app:1.0.0
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
+            
+            
