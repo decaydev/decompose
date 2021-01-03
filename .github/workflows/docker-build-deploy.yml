@@ -61,6 +61,6 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ steps.tag_version.outputs.new_tag }}
+          tags: ghcr.io/${{ github.repository_owner }}/decompose:${{ steps.tag_version.outputs.new_tag }}
           labels: org.opencontainers.image.version=${{ steps.prep.outputs.version }}
           
