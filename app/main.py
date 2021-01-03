@@ -85,7 +85,6 @@ class TileBanner(object):
             ]
         )
 
-        
 
 class TileKits(object):
     def __init__(self, data):
