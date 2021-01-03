@@ -1,7 +1,18 @@
 name: docker publish
+
 on:
+  push:
+    tags:
+      - '*'
   release:
-    types: [released]
+    types:
+      - published
+      - unpublished
+      - created
+      - edited
+      - deleted
+      - prereleased
+      - released
 
 jobs:
   build-push:
