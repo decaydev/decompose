@@ -14,6 +14,7 @@ items = blob.json()
 def search_item(shortname):
     return next((item for item in items["items"] if item["shortname"] == shortname), False)
 
+
 @app.route("/kit", methods=["PUT"])
 def kit():
     data = request.json
@@ -26,6 +27,77 @@ def kit():
     tile.pngquant()
     return send_file(f"{tile.id}/kit.png", mimetype="image/png")
 
+
+@app.route("/banner", methods=["PUT"])
+def kit():
+    data = request.json
+    tile = TileBanner(data)
+    tile.request_assets()
+    tile.create_overlay()
+    tile.create_kit()
+    tile.pngquant()
+    return send_file(f"{tile.id}/kit.png", mimetype="image/png")
+
+
+class TileBanner(object):
+    def __init__(self, data):
+        self.id = str(uuid.uuid4())
+        self.data = data
+        return send_file(f"{tile.id}/kit.png", mimetype="image/png")
+
+    def request_assets(self):
+        os.mkdir(self.id)
+        try:
+            r = requests.get(self.data["banner"])
+            r.raise_for_status()
+        except HTTPError:
+            raise Exception(f"unable to download asset: {asset}")
+        open(f"{self.id}/{asset}.png", "wb").write(r.content)
+        self.validate_asset(asset)
+
+    def validate_asset(self, asset):
+        d = self.data["size"][asset]
+        with Image.open(f"{self.id}/{asset}.png") as (img):
+            width, height = img.size
+            if d["width"] == width and d["height"] == height:
+                pass
+            else:
+                raise Exception(f"invalid image dimensions for {asset}")
+                
+        def create_overlay(self):
+            banner = 
+            subprocess.run(
+                [
+                    "convert",
+                    f"{self.id}/banner.png",
+                    "-background",
+                    "None",
+                    "-font",
+                    "PermanentMarker.ttf",
+                    "-pointsize",
+                    "90",
+                    "-fill",
+                    "black",
+                    "-stroke",
+                    "black",
+                    "-strokewidth",
+                    "19",
+                    "-annotate",
+                    f"+{annotate}+485",
+                    f"x{self.data['items'][item]}",
+                    "-fill",
+                    "white",
+                    "-stroke",
+                    "white",
+                    "-strokewidth",
+                    "1",
+                    "-annotate",
+                    f"+{annotate}+485",
+                    f"x{self.data['items'][item]}",
+                    f"{self.id}/items/item_{num}.png",
+                ]
+            )
+        
 
 class TileKits(object):
     def __init__(self, data):
