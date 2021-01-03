@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: Bump version and push tag
-        uses: hennejg/github-tag-action@v4.2.4
+      - name: bump version and push tag
+        uses: home-furnishing-nordic/semver-release-manager@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          
