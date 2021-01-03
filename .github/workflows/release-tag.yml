@@ -10,8 +10,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: bump version and push tag
-        uses: home-furnishing-nordic/semver-release-manager@master
+      - id: bump
+        uses: zwaldowski/match-label-action@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed: major,minor,patch
+      - uses: zwaldowski/semver-release-action@v1
+        with:
+          bump: ${{ steps.bump.outputs.match }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}  
