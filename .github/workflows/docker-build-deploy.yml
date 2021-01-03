@@ -61,6 +61,6 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ steps.docker_meta.outputs.tags }}
+          tags: ${{ steps.tag_version.outputs.new_tag }}
           labels: org.opencontainers.image.version=${{ steps.prep.outputs.version }}
           
