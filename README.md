@@ -1,6 +1,6 @@
 # decompose
 
-Flask server that returns kit tiles (using imagemagick and pngquant) 
+Flask server that returns png tiles (using imagemagick and pngquant)
 
 ![python install and lint](https://github.com/decaydev/flask-kits/workflows/python%20install%20and%20lint/badge.svg)
 
