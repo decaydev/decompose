@@ -1,10 +1,7 @@
 name: docker publish
 on:
-  workflow_run:
-    workflows: ["tag version"]
-    branches: [master]
-    types: 
-      - completed
+  release:
+    types: [created]
 
 jobs:
   build-push:
