@@ -1,10 +1,7 @@
 name: docker publish
 on:
-  push:
-    tags:
-      - 'v*'
   release:
-    types: [published]
+    types: [created]
 
 jobs:
   build-push:
