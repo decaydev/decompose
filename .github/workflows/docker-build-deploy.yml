@@ -1,9 +1,10 @@
-name: docker publish
-
+name: cd
 on:
-  push:
-    tags:
-      - '**'
+  workflow_run:
+    workflows: ["python install and lint"]
+    branches: [master]
+    types: 
+      - completed
 
 jobs:
   build-push:
@@ -13,15 +14,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Prepare
-        id: prep
-        run: |
-          GHCR_IMAGE=ghcr.io/${{ github.repository_owner }}/decompose
-          VERSION=${GITHUB_REF#refs/tags/v}
-          TAGS="${TAGS},${GHCR_IMAGE}:${VERSION},${GHCR_IMAGE}:latest"
-          echo ::set-output name=tags::${TAGS}
-          echo ::set-output name=version::${VERSION}
-          echo ::set-output name=ghcr_image::${GHCR_IMAGE}
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create a GitHub release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}:
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@master
         with:
