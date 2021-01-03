@@ -15,4 +15,3 @@ jobs:
         uses: home-furnishing-nordic/semver-release-manager@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          
