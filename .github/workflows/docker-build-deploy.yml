@@ -1,9 +1,12 @@
-name: docker build and deploy
 
+
+name: docker build and deploy
 on:
-  push:
-    tags:
-      - '*'
+  workflow_run:
+    workflows: ["bump version"]
+    branches: [master]
+    types: 
+      - completed
 
 jobs:
   docker-build-deploy:
@@ -17,7 +20,7 @@ jobs:
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
         with:
-          images: name/app
+          images: decaydev/decompose
           tag-semver: |
             {{version}}
             {{major}}.{{minor}}
