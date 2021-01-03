@@ -1,7 +1,7 @@
 name: cd
 on:
   workflow_run:
-    workflows: ["python install and lint"]
+    workflows: ["ci"]
     branches: [master]
     types: 
       - completed
