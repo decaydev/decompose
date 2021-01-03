@@ -35,7 +35,7 @@ jobs:
       - name: Login to Github Container Registry
         uses: docker/login-action@v1.8.0
         with:
-          registry: docker.pkg.github.com
+          registry: ghcr.io
           username: decayops
           password: ${{ secrets.DECAYOPS }}
 
@@ -43,7 +43,7 @@ jobs:
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
         with:
-          images: docker.pkg.github.com/decaydev/decompose/decaydev-decompose
+          images: ghcr.io/${{ github.repository_owner }}/decompose
           tag-semver: |
             {{version}}
             {{major}}.{{minor}}
