@@ -117,9 +117,9 @@ class TileKits(object):
         subprocess.run(
             [
                 "convert",
-                f"{self.id}/kits_bkgd.png",
+                f"{self.id}/kit_bkgd.png",
                 "(",
-                f"{self.id}/kits_icon.png",
+                f"{self.id}/icon.png",
                 "-scale",
                 "384x384",
                 "-geometry",
@@ -130,7 +130,7 @@ class TileKits(object):
                 "-background",
                 "None",
                 "-composite",
-                f"{self.id}/kits_tile.png",
+                f"{self.id}/kit_tile.png",
             ]
         )
 
@@ -274,7 +274,7 @@ class TileKits(object):
         subprocess.run(
             [
                 "convert",
-                f"{self.id}/kits_tile.png",
+                f"{self.id}/kit_tile.png",
                 "(",
                 f"{self.id}/items/montage.png",
                 "-geometry",
