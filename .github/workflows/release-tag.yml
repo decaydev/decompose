@@ -10,19 +10,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Bump Version
-      id: tag
-      uses: mathieudutour/github-tag-action@v5.1
-      if: github.ref == 'refs/heads/master'
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: release
-      uses: ncipollo/release-action@v1
-      if: github.ref == 'refs/heads/master'
-      with:
-        name: "Release ${{ steps.tag.outputs.new_tag }}"
-        body: "latest release"
-        token: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ steps.tag.outputs.new_tag }}
+      - uses: actions/checkout@v2
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v5.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create a GitHub release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
