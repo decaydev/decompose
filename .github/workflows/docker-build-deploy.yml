@@ -1,6 +1,4 @@
-
-
-name: docker build and deploy
+name: docker publish
 on:
   workflow_run:
     workflows: ["bump version"]
@@ -9,43 +7,46 @@ on:
       - completed
 
 jobs:
-  docker-build-deploy:
+  build-push:
     runs-on: ubuntu-latest
+
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v2
-      -
-        name: Docker meta
-        id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v1
+
+      - name: Prepare
+        id: prep
+        run: |
+          GHCR_IMAGE=ghcr.io/${{ github.repository_owner }}/decompose
+          VERSION=${GITHUB_REF#refs/tags/v}
+          TAGS="${TAGS},${GHCR_IMAGE}:${VERSION},${GHCR_IMAGE}:latest"
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=ghcr_image::${GHCR_IMAGE}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@master
         with:
-          images: decaydev/decompose
-          tag-semver: |
-            {{version}}
-            {{major}}.{{minor}}
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      -
-        name: Login to GitHub Container Registry
+          platforms: all
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
+
+      - name: Login to Github Container Registry
         uses: docker/login-action@v1 
         with:
           registry: ghcr.io
-          username: decayops
-          password: ${{ secrets.DECAYOPS }}
-      -
-        name: Build and push
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.CR_PAT }}
+
+      - name: Build and push
         uses: docker/build-push-action@v2
         with:
+          builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./Dockerfile
           platforms: linux/amd64
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
-            
-            
+          push: true
+          tags: ${{ steps.prep.outputs.tags }}
+          labels: org.opencontainers.image.version=${{ steps.prep.outputs.version }}
+          
