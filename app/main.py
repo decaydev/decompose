@@ -103,23 +103,12 @@ class TileBanner(object):
             ]
         )
 
-
 class TileKits(object):
     def __init__(self, data):
         self.id = str(uuid.uuid4())
         self.data = data
         self.items = items["items"]
-        self.item_count = len(self.data["items"])
-
-
-    def validate_asset(self, asset):
-        d = self.data["imgs"][asset]
-        with Image.open(f"{self.id}/{asset}.png") as (img):
-            width, height = img.size
-            if d["width"] == width and d["height"] == height:
-                pass
-            else:
-                raise Exception(f"invalid image dimensions for {asset}")
+        self.item_count = len(data["attrs"]["items"])
 
     def create_overlay(self):
         os.mkdir(f"{self.id}")
@@ -146,8 +135,8 @@ class TileKits(object):
     def create_items(self):
         os.mkdir(f"{self.id}/items")
 
-        for index, item in enumerate(self.data["items"]):
-            stack = self.data["items"][item]
+        for index, item in enumerate(self.data["attrs"]["items"]):
+            stack = self.data["attrs"]["items"][item]
             sprite = search_item(item)
 
             # zfill filename for imagemagick(shell glob)
@@ -210,7 +199,7 @@ class TileKits(object):
                     "19",
                     "-annotate",
                     f"+{annotate}+485",
-                    f"x{self.data['items'][item]}",
+                    f"x{self.data['attrs']['items'][item]}",
                     "-fill",
                     "white",
                     "-stroke",
@@ -219,7 +208,7 @@ class TileKits(object):
                     "1",
                     "-annotate",
                     f"+{annotate}+485",
-                    f"x{self.data['items'][item]}",
+                    f"x{self.data['attrs']['items'][item]}",
                     f"{self.id}/items/item_{num}.png",
                 ]
             )
