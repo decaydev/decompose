@@ -1,6 +1,6 @@
-import os, subprocess, uuid
+import os, shutil, subprocess, uuid
 
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, after_this_request
 from PIL import Image
 import requests
 from requests.exceptions import HTTPError
@@ -15,16 +15,27 @@ def search_item(shortname):
     return next((item for item in items["items"] if item["shortname"] == shortname), False)
 
 
+@app.route("/api", methods=["PUT"])
+def decompose():
+    data = request.json
+    type = data["type"]
+
+
 @app.route("/kit", methods=["PUT"])
 def kit():
     data = request.json
     tile = TileKits(data)
-    tile.request_assets()
     tile.create_overlay()
     tile.create_items()
     tile.create_montage()
     tile.create_kit()
     tile.pngquant()
+
+    @after_this_request
+    def cleanup(f):
+        shutil.rmtree(f"{tile.id}/")
+        return f
+
     return send_file(f"{tile.id}/kit.png", mimetype="image/png")
 
 
@@ -32,31 +43,27 @@ def kit():
 def banner():
     data = request.json
     tile = TileBanner(data)
-    tile.request_assets()
     tile.create_overlay()
-    #tile.pngquant()
-    return send_file(f"{tile.id}/output.png", mimetype="image/png")
+    tile.pngquant()
+    
+    @after_this_request
+    def cleanup(f):
+        shutil.rmtree(f"{tile.id}/")
+        return f
 
+    return send_file(f"{tile.id}/output.png", mimetype="image/png")
 
 class TileBanner(object):
     def __init__(self, data):
         self.id = str(uuid.uuid4())
         self.data = data
 
-    def request_assets(self):
-        os.mkdir(self.id)
-        try:
-            r = requests.get(self.data["banner"])
-            r.raise_for_status()
-        except HTTPError:
-            raise Exception(f"unable to download: {banner}")
-        open(f"{self.id}/banner.png", "wb").write(r.content)
-
     def create_overlay(self):
+        os.mkdir(f"{self.id}")
         subprocess.run(
             [
                 "convert",
-                f"{self.id}/banner.png",
+                f"sprites/banners/banner.png",
                 "-background",
                 "None",
                 "-font",
@@ -81,6 +88,17 @@ class TileBanner(object):
                 "-annotate",
                 f"{self.data['annotate']}",
                 f"{self.data['steam_displayname']}",
+                f"{self.id}/pre.png",
+            ]
+        )
+
+    def pngquant(self):
+        subprocess.run(
+            [
+                "pngquant",
+                "--strip",
+                f"{self.id}/pre.png",
+                "-o",
                 f"{self.id}/output.png",
             ]
         )
@@ -93,16 +111,6 @@ class TileKits(object):
         self.items = items["items"]
         self.item_count = len(self.data["items"])
 
-    def request_assets(self):
-        os.mkdir(self.id)
-        for asset in self.data["imgs"]:
-            try:
-                r = requests.get(self.data["imgs"][asset]["url"])
-                r.raise_for_status()
-            except HTTPError:
-                raise Exception(f"unable to download asset: {asset}")
-            open(f"{self.id}/{asset}.png", "wb").write(r.content)
-            self.validate_asset(asset)
 
     def validate_asset(self, asset):
         d = self.data["imgs"][asset]
@@ -114,12 +122,13 @@ class TileKits(object):
                 raise Exception(f"invalid image dimensions for {asset}")
 
     def create_overlay(self):
+        os.mkdir(f"{self.id}")
         subprocess.run(
             [
                 "convert",
-                f"{self.id}/kit_bkgd.png",
+                f"sprites/kits/kit_bkgd.png",
                 "(",
-                f"{self.id}/icon.png",
+                f"sprites/kits/icon.png",
                 "-scale",
                 "384x384",
                 "-geometry",
@@ -167,7 +176,7 @@ class TileKits(object):
             subprocess.run(
                 [
                     "convert",
-                    f"{self.id}/item_bkgd.png",
+                    f"sprites/kits/item_bkgd.png",
                     "(",
                     f"sprites/{sprite['spriteName']}.png",
                     "-scale",
@@ -214,7 +223,6 @@ class TileKits(object):
                     f"{self.id}/items/item_{num}.png",
                 ]
             )
-            os.remove(f"{self.id}/items/item-{item}.png")
 
     def create_montage(self):
         if self.item_count <= 1:
