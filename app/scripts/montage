@@ -1,0 +1,46 @@
+#!/bin/bash
+
+PROJ=unset
+NAME=unset
+UUID=unset
+OUTPUT="montage.png"
+
+usage()
+{
+  echo "Usage: montage [ -p | --type TYPE ]
+              [ -n | --name NAME ]
+              [ -u | --uuid UUID ]
+              [ -s | --size SIZE]
+              [ -o | --output OUTPUT ]"
+  exit 2
+}
+
+PARSED_ARGUMENTS=$(getopt -a -n stroke -o p:n:u:s:o: --long type:,name:,uuid:,size:,output: -- "$@")
+VALID_ARGUMENTS=$?
+if [ "$VALID_ARGUMENTS" != "0" ]; then
+  usage
+fi
+eval set -- "$PARSED_ARGUMENTS"
+
+while :
+do
+  case "$1" in
+    -p | --type)   TYPE="$2"   ; shift 2 ;;
+    -n | --name)   NAME="$2"   ; shift 2 ;;
+    -u | --uuid)   UUID="$2"   ; shift 2 ;;
+    -t | --size)   SIZE="$2"   ; shift 2 ;;
+    -o | --output) OUTPUT="$2" ; shift 2 ;;
+    --) shift; break ;;
+    *) echo "Unexpected option: $1 - this should not happen."
+       usage ;;
+  esac
+done
+
+KIT=$(echo ${NAME} | cut -d'/' -f1)
+source "scripts/templates/$TYPE/$KIT/montage"
+
+cmd=$(montage $UUID/items/item-* \
+    -background none \
+    -tile $TILE \
+    -geometry $GEOMETRY \
+    $UUID/$OUTPUT)

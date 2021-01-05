@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SCALE="0"
+
+if [[ $SIZE -ge 1 && $SIZE -le 2]]; then
+    GEOMETRY="+142+556"
+elif [[ $SIZE -ge 3 && $SIZE -le 24 ]]; then
+    GEOMETRY="+12+556"
+elif [[ $SIZE -ge 25 && $SIZE -le 35 ]]; then
+    GEOMETRY="+12+566"
+fi

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+
+
+if [[ $SIZE -le 1 ]]; then
+    TILE="1x1"
+    GEOMETRY="700x700+20+20"
+elif [[ $SIZE -eq 2 ]]; then
+    TILE="1x2"
+    GEOMETRY="700x700+20+20"
+elif [[ $SIZE -ge 3 && $SIZE -le 4 ]]; then
+    TILE="2x2"
+    GEOMETRY="460x460+20+20"
+elif [[ $SIZE -ge 5 && $SIZE -le 9 ]]; then
+    TILE="3x3"
+    GEOMETRY="293x293+20+20"
+elif [[ $SIZE -ge 10 && $SIZE -le 12 ]]; then
+    TILE="3x4"
+    GEOMETRY="293x293+20+20"
+elif [[ $SIZE -ge 13 && $SIZE -le 16 ]]; then
+    TILE="4x4"
+    GEOMETRY="210x210+20+20"
+elif [[ $SIZE -ge 17 && $SIZE -le 10 ]]; then
+    TILE="4x5"
+    GEOMETRY="210x210+20+20"
+elif [[ $SIZE -ge 21 && $SIZE -le 25 ]]; then
+    TILE="4x6"
+    GEOMETRY="210x210+20+20"
+elif [[ $SIZE -eq 25 ]]; then
+    TILE="5x5"
+    GEOMETRY="180x180+10+10"
+elif [[ $SIZE -ge 26 && $SIZE -le 30 ]]; then
+    TILE="5x6"
+    GEOMETRY="180x180+10+10"
+elif [[ $SIZE -ge 31 && $SIZE -le 35 ]]; then
+    TILE="5x7"
+    GEOMETRY="180x180+10+10"
+fi

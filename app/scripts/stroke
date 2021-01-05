@@ -1,0 +1,65 @@
+#!/bin/bash
+
+PROJ=unset
+NAME=unset
+UUID=unset
+OUTPUT="pre.png"
+IMG=unset
+
+usage()
+{
+  echo "Usage: stroke [ -p | --type TYPE ]
+              [ -n | --name NAME ]
+              [ -u | --uuid UUID ]
+              [ -t | --uuid TEXT ]
+              [ -i | --uuid IMG ] 
+              [ -o | --output OUTPUT ]"
+  exit 2
+}
+
+PARSED_ARGUMENTS=$(getopt -a -n stroke -o p:n:u:t:i:o: --long type:,name:,uuid:,text:,img:,output: -- "$@")
+VALID_ARGUMENTS=$?
+if [ "$VALID_ARGUMENTS" != "0" ]; then
+  usage
+fi
+eval set -- "$PARSED_ARGUMENTS"
+
+while :
+do
+  case "$1" in
+    -p | --type)   TYPE="$2"   ; shift 2 ;;
+    -n | --name)   NAME="$2"   ; shift 2 ;;
+    -u | --uuid)   UUID="$2"   ; shift 2 ;;
+    -t | --text)   TEXT="$2"   ; shift 2 ;;
+    -i | --img)    IMG="$2"    ; shift 2 ;;
+    -o | --output) OUTPUT="$2" ; shift 2 ;;
+    --) shift; break ;;
+    *) echo "Unexpected option: $1 - this should not happen."
+       usage ;;
+  esac
+done
+
+mkdir -p "$UUID/items"
+
+KIT=$(echo ${NAME} | cut -d'/' -f1)
+
+if [[ $OUTPUT =~ [item-pre]* ]]; then
+  source "scripts/templates/$TYPE/$KIT/tile"
+fi
+
+#source "scripts/templates/$TYPE/$NAME.sh"
+echo $IMG
+
+cmd=$(convert $IMG \
+    -background none \
+    -font $FONT \
+    -pointsize $POINTSIZE \
+    -fill $STROKECOLOR \
+    -stroke $STROKECOLOR \
+    -strokewidth $STROKEWIDTH \
+    -annotate $POSITION "$TEXT" \
+    -fill $FILLCOLOR \
+    -stroke $FILLCOLOR \
+    -strokewidth $FILLSTROKEWIDTH \
+    -annotate $POSITION "$TEXT" \
+    $UUID/$OUTPUT)

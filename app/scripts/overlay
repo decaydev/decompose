@@ -1,0 +1,73 @@
+#!/bin/bash
+
+PROJ=unset
+NAME=unset
+UUID=unset
+OUTPUT="pre.png"
+SCALE=""
+
+usage()
+{
+  echo "Usage: overlay [ -p | --type TYPE ]
+              [ -n | --name NAME ]
+              [ -u | --uuid UUID ]
+              [ -i | --img IMG ]
+              [ -l | --over OVER ]  
+              [ -o | --output OUTPUT ]"
+  exit 2
+}
+
+PARSED_ARGUMENTS=$(getopt -a -n stroke -o p:n:u:i:l:o: --long type:,name:,uuid:,img:,over:,output: -- "$@")
+VALID_ARGUMENTS=$?
+if [ "$VALID_ARGUMENTS" != "0" ]; then
+  usage
+fi
+eval set -- "$PARSED_ARGUMENTS"
+
+while :
+do
+  case "$1" in
+    -p | --type)   TYPE="$2"   ; shift 2 ;;
+    -n | --name)   NAME="$2"   ; shift 2 ;;
+    -u | --uuid)   UUID="$2"   ; shift 2 ;;
+    -i | --img)    IMG="$2"    ; shift 2 ;;
+    -l | --over)   OVER="$2"   ; shift 2 ;;
+    -o | --output) OUTPUT="$2" ; shift 2 ;;
+    --) shift; break ;;
+    *) echo "Unexpected option: $1 - this should not happen."
+       usage ;;
+  esac
+done
+
+mkdir -p "$UUID/items"
+
+KIT=$(echo ${NAME} | cut -d'/' -f1)
+
+
+
+if [[ $OUTPUT =~ "pre"* ]]; then
+  source "scripts/templates/$TYPE/$KIT/item"
+fi
+
+if [[ $OUTPUT == 'bkgd.png' ]]; then
+  source "scripts/templates/$TYPE/$KIT/bkgd"
+fi
+
+if [[ $OUTPUT == 'overlay.png' ]]; then
+  source "scripts/templates/$TYPE/$KIT/final"
+fi
+
+
+if [[ "$SCALE" == "0" ]]; then
+  echo "im tiling a backgr"
+  cmd=$(convert $IMG \
+    \( $OVER -geometry "$GEOMETRY" -background none \) \
+    -background none \
+    -composite $UUID/$OUTPUT)
+else
+  echo "IM CREATING A items $GEOMETRY"
+  cmd=$(convert $IMG \
+      \( $OVER -scale "$SCALE" -geometry "$GEOMETRY" -background none \) \
+      -background none \
+      -composite $UUID/$OUTPUT)
+fi

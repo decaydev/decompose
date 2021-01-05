@@ -1,0 +1,8 @@
+IMG="sprites/banners/banner.png"
+FONT="fonts/Rust.ttf"
+POINTSIZE="90"
+STROKECOLOR="blue"
+STROKEWIDTH="20"
+POSITION="+40+220"
+FILLCOLOR="orange"
+FILLSTROKEWIDTH="1"
