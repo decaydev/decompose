@@ -47,8 +47,10 @@ if [[ $OUTPUT =~ [item-pre]* ]]; then
   source "scripts/templates/$TYPE/$KIT/tile"
 fi
 
-#source "scripts/templates/$TYPE/$NAME.sh"
-echo $IMG
+if [[ $OUTPUT == "pre.png" ]]; then
+  echo "we here"
+  source "scripts/templates/$TYPE/$NAME"
+fi
 
 cmd=$(convert $IMG \
     -background none \

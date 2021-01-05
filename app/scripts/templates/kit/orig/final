@@ -2,7 +2,7 @@
 
 SCALE="0"
 
-if [[ $SIZE -ge 1 && $SIZE -le 2]]; then
+if [[ $SIZE -ge 1 && $SIZE -le 2 ]]; then
     GEOMETRY="+142+556"
 elif [[ $SIZE -ge 3 && $SIZE -le 24 ]]; then
     GEOMETRY="+12+556"
