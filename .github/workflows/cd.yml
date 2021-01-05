@@ -44,15 +44,6 @@ jobs:
           username: decayops
           password: ${{ secrets.DECAYOPS }}
 
-      - name: Docker meta
-        id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v1
-        with:
-          images: ghcr.io/${{ github.repository_owner }}/decompose
-          tag-semver: |
-            {{version}}
-            {{major}}.{{minor}}
-
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
