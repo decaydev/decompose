@@ -43,7 +43,7 @@ mkdir -p "$UUID/items"
 
 KIT=$(echo ${NAME} | cut -d'/' -f1)
 
-if [[ $OUTPUT =~ [item-pre]* ]]; then
+if [[ $OUTPUT =~ "item-"* ]]; then
   source "scripts/templates/$TYPE/$KIT/tile"
 fi
 
