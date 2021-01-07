@@ -48,7 +48,6 @@ if [[ $OUTPUT =~ [item-pre]* ]]; then
 fi
 
 if [[ $OUTPUT == "pre.png" ]]; then
-  echo "we here"
   source "scripts/templates/$TYPE/$NAME"
 fi
 
