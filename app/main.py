@@ -22,7 +22,7 @@ def decompose():
 
     @after_this_request
     def cleanup(f):
-        #shutil.rmtree(f"{resp.id}/")
+        shutil.rmtree(f"{resp.id}/")
         return f
 
     return send_file(f"{resp.id}/output.png", mimetype="image/png")
