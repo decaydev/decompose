@@ -19,7 +19,7 @@ def search_item(shortname):
 @app.route("/api", methods=["PUT"])
 def decompose():
     data = request.json
-    hash = hashlib.sha256(b"%s".format(request.data)).hexdigest()
+    hash = hashlib.sha256(request.data.encode("utf-8")).hexdigest()
 
     if Path(f"cache/{hash}.png").is_file():
         return send_file(f"cache/{hash}.png", mimetype="image/png")
