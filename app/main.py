@@ -71,7 +71,7 @@ class Decompose(object):
 
             self.stroke(
                 f"x{text}",
-                f"sprites/kit/{name}/tiles/{sprite['spriteName']}.png",
+                f"sprites/kits/{name}/tiles/{sprite['spriteName']}.png",
                 f"items/item-{num}.png"
             )
             self.montage()
