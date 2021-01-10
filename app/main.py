@@ -1,4 +1,5 @@
-import os
+import hashlib
+from pathlib import Path
 import shutil
 import subprocess
 import uuid
@@ -18,15 +19,21 @@ def search_item(shortname):
 @app.route("/api", methods=["PUT"])
 def decompose():
     data = request.json
-    resp = Decompose(data)
+    hash = hashlib.sha256(b"%s".format(request.data)).hexdigest()
 
-    @after_this_request
-    def cleanup(f):
-        shutil.rmtree(f"{resp.id}/")
-        return f
+    if Path(f"cache/{hash}.png").is_file():
+        return send_file(f"cache/{hash}.png", mimetype="image/png")
+    else:
+        resp = Decompose(data)
 
-    return send_file(f"{resp.id}/output.png", mimetype="image/png")
-   
+        @after_this_request
+        def cleanup(f):
+            shutil.move("{resp.id}/output.png", f"cache/{hash}.png")
+            shutil.rmtree(f"{resp.id}/")
+            return f
+
+        return send_file(f"{resp.id}/output.png", mimetype="image/png")
+
 
 class Decompose(object):
     def __init__(self, data):
