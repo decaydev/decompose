@@ -28,7 +28,7 @@ def decompose():
 
         @after_this_request
         def cleanup(f):
-            shutil.move("{resp.id}/output.png", f"cache/{hash}.png")
+            shutil.move(f"{resp.id}/output.png", f"cache/{hash}.png")
             shutil.rmtree(f"{resp.id}/")
             return f
 
