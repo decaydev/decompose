@@ -62,14 +62,9 @@ class Decompose(object):
             else:
                 num = index
 
-            self.overlay(
-                f"sprites/kits/{name}/item_bkgd.png",
-                f"sprites/{sprite['spriteName']}.png",
-                f"items/pre-{num}.png"
-            )
             self.stroke(
                 f"x{text}",
-                f"{self.id}/items/pre-{num}.png",
+                f"sprites/kit/{name}/tiles/{sprite['spriteName']}.png",
                 f"items/item-{num}.png"
             )
             self.montage()
