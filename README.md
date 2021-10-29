@@ -1,4 +1,4 @@
-# decompose
+# decompose images
 
 The decay.dev secret sauce for building interactive game graphics in rust/oxide
 
